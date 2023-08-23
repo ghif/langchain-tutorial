@@ -1,5 +1,5 @@
 # Ngoprek LangChain
-Repositori ini berisi hasil oprekan sederhana dalam membuat aplikasi berbasis generative AI dengan menggunakan [LangChain[(https://github.com/langchain-ai/langchain)] melalui bahasa pemograman Python.
+Repositori ini berisi hasil oprekan sederhana dalam membuat aplikasi berbasis generative AI dengan menggunakan [LangChain](https://github.com/langchain-ai/langchain) melalui bahasa pemograman Python.
 
 ## Apa itu LangChain?
 > LangChain merupakan sebuah framework untuk membangun aplikasi yang didukung oleh Large Language Models (LLMs).
@@ -19,6 +19,11 @@ LangChain menawarkan kemudahan bagi pengembang untuk berinteraksi dengan LLMs se
 
 Dengan kedua aspek tersebut kita sudah dapat mengerjakan berbagai studi kasus.
 
+## Instalasi
+```
+pip install langchain
+```
+
 ## Models
 Models dapat dipandang sebagai antarmuka dari LLMs. Ada beberapa tipe Models yang disediakan LangChain.
 
@@ -26,7 +31,11 @@ Models dapat dipandang sebagai antarmuka dari LLMs. Ada beberapa tipe Models yan
 **Menerima 1 teks** dan mengeluarkan 1 teks.
 ```python
 from langchain.llms import OpenAI
+
 llm = OpenAI()
+
+prompt = "Bulan ini merupakan bulan Agustus, bulan depan merupakan bulan Desember. Apakah pertanyaan tersebut benar? Jika salah, jelaskan letak kesalahannya."
+response = llm(prompt) # inference
 ```
 
 
@@ -34,7 +43,53 @@ llm = OpenAI()
 **Menerima rangkaian teks** dan mengeluarkan 1 teks.
 ```python
 from langchain.chat_models import ChatOpenAI
+
 chat_llm = ChatOpenAI()
+
+prompt = "Bulan ini merupakan bulan Agustus, bulan depan merupakan bulan Desember. Apakah pertanyaan tersebut benar? Jika salah, jelaskan letak kesalahannya."
+response = chat_llm.predict(prompt) # inference
+```
+
+
+## Prompt Template
+Sebuah objek yang membantu mendesain prompt berdasarkan kombinasi dari input pengguna, template statis, dan informasi non-statis lainnya.
+
+```python
+from langchain.prompts import PromptTemplate
+
+next_month = "Desember"
+template = """
+Bulan ini merupakan bulan Agustus, bulan depan merupakan bulan {month}. 
+Apakah pertanyaan tersebut benar? Jika salah, jelaskan letak kesalahannya.
+"""
+
+prompt = PromptTemplate.from_template(template)
+final_prompt = prompt.format(
+    month=next_month
+)
+```
+
+## Output Parser
+Sebuah objek untuk menstrukturkan output dari LLM, e.g., dalam bentuk JSON.
+
+```python
+from langchain.output_parsers import StructuredOutputParser, ResponseSchema
+
+first_schema = ResponseSchema(
+    name="first",
+    description="This is the first schema"
+)
+
+second_schema = ResponseSchema(
+    name="first",
+    description="This is the second schema"
+)
+
+output_parser = StructuredOutputParser(
+    [first_schema, second_schema]
+)
+
+format_instruction = output_parser.get_format_instructions() # string
 ```
 
 
