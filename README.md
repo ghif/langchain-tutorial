@@ -19,6 +19,16 @@ LangChain menawarkan kemudahan bagi pengembang untuk berinteraksi dengan LLMs se
 
 Dengan kedua aspek tersebut kita sudah dapat mengerjakan berbagai studi kasus.
 
+## Models
+Models dapat dipandang sebagai antarmuka dari LLMs. Ada beberapa tipe Models yang disediakan LangChain.
 
+### Language Model
+**Menerima 1 teks** dan mengeluarkan 1 teks.
+    from langchain.llms import OpenAI
+    llm = OpenAI(temperature)
+
+
+### Chat Model
+**Menerima rangkaian teks** dan mengeluarkan 1 teks.
 
 
