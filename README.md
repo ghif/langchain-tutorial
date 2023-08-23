@@ -92,4 +92,33 @@ output_parser = StructuredOutputParser(
 format_instruction = output_parser.get_format_instructions() # string
 ```
 
+## Chains
+Chains merupakan salah satu kemampuan terpenting yang dimiliki oleh LangChain, yaitu menggabungkan beberapa proses inferensi LLM menjadi suatu rangkaian untuk memecahkan masalah tertentu.
+
+### 1. Simple Sequential Chains
+Mengkombinasikan inferensi LLM secara sekuensial: Chain 1 --> Chain 2 --> ....
+
+```python
+from langchain.chains import LLMChain, SimpleSequentialChain
+from langchain.chat_models import ChatOpenAI
+from langchain.prompts import ChatPromptTemplate
+
+# Model
+llm = ChatOpenAI()
+
+# Chain 1
+prompt1 = ChatPromptTemplate(...)
+chain1 = LLMChain(llm=llm, prompt=prompt1)
+
+# Chain 2
+prompt2 = ChatPromptTemplate(...)
+chain2 = LLMChain(llm=llm, prompt=prompt2)
+
+overall_chain = SimpleSequentialChain(
+    chains=[chain1, chain2], 
+    verbose=True
+)
+
+response = overall_chain.run("<some texts>")
+```
 
