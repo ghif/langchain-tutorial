@@ -24,11 +24,17 @@ Models dapat dipandang sebagai antarmuka dari LLMs. Ada beberapa tipe Models yan
 
 ### Language Model
 **Menerima 1 teks** dan mengeluarkan 1 teks.
-    from langchain.llms import OpenAI
-    llm = OpenAI(temperature)
+```python
+from langchain.llms import OpenAI
+llm = OpenAI()
+```
 
 
 ### Chat Model
 **Menerima rangkaian teks** dan mengeluarkan 1 teks.
+```python
+from langchain.chat_models import ChatOpenAI
+chat_llm = ChatOpenAI()
+```
 
 
