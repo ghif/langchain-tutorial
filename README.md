@@ -207,3 +207,20 @@ chain = RetrievalQA.from_llm(
     retriever=db.as_retriever()
 )
 ```
+
+
+## Embeddings dan Vector Store
+*Embeddings* merupakan model deep learning untuk mengkonversi teks menjadi vektor berdimensi yang tetap, dimana hubungan kedekatan antar vektor dirancang agar memiliki makna semantik.
+
+*Vector store* merupakan database tempat penyimpanan vektor-vektor dari *embeddings* untuk memudahkan pengelolaan dan pengambilan (*retrieval*) informasi.
+
+```python
+from langchain.embeddings.openai import OpenAIEmbeddings
+from langchain.vectorstores import FAISS
+
+# Define embeddings
+embeddings = OpenAIEmbeddings()
+
+# Define vector store DB
+db = FAISS.from_documents(<original_texts>, embeddings)
+```
