@@ -96,7 +96,7 @@ format_instruction = output_parser.get_format_instructions() # string
 Chains merupakan salah satu kemampuan terpenting yang dimiliki oleh LangChain, yaitu menggabungkan beberapa proses inferensi LLM menjadi suatu rangkaian untuk memecahkan masalah tertentu.
 
 ### 1. Simple Sequential Chains
-Mengkombinasikan inferensi LLM secara sekuensial: Chain 1 --> Chain 2 --> ....
+Mengkombinasikan inferensi beberapa LLM menjadi sebuah rantai sekuensial: Chain 1 --> Chain 2 --> ....
 
 ```python
 from langchain.chains import LLMChain, SimpleSequentialChain
@@ -107,11 +107,11 @@ from langchain.prompts import ChatPromptTemplate
 llm = ChatOpenAI()
 
 # Chain 1
-prompt1 = ChatPromptTemplate(...)
+prompt1 = ChatPromptTemplate.from_template(...)
 chain1 = LLMChain(llm=llm, prompt=prompt1)
 
 # Chain 2
-prompt2 = ChatPromptTemplate(...)
+prompt2 = ChatPromptTemplate.from_template(...)
 chain2 = LLMChain(llm=llm, prompt=prompt2)
 
 overall_chain = SimpleSequentialChain(
@@ -122,3 +122,62 @@ overall_chain = SimpleSequentialChain(
 response = overall_chain.run("<some texts>")
 ```
 
+### 2. Sequential Chains
+Mengkombinasikan inferensi LLM secara sekuensial seperti Simple Sequential Chain namun memungkinkan untuk multi-input atau multi-output.
+
+```python
+from langchain.chains import LLMChain, SequentialChain
+from langchain.chat_models import ChatOpenAI
+from langchain.prompts import ChatPromptTemplate
+
+# Model
+llm = ChatOpenAI()
+
+prompt1 = ChatPromptTemplate.from_template(
+    """
+    blah
+    {input1}
+    """
+)
+chain1 = LLMChain(
+    llm=chat_llm,
+    prompt=prompt1,
+    output_key="output1",
+    verbose=True
+)
+
+# Chain2: input=output1, output=output2
+prompt2 = ChatPromptTemplate.from_template(
+    """
+    blah
+    {output1}
+    """
+)
+chain2 = LLMChain(
+    llm=chat_llm,
+    prompt=prompt2,
+    output_key="output2",
+    verbose=True
+)
+
+# Chain3: input=output1, output=output3
+prompt3 = ChatPromptTemplate.from_template(
+    """
+    blah {output1}
+    {indonesian_review}
+    """
+)
+chain3 = LLMChain(
+    llm=chat_llm,
+    prompt=prompt3,
+    output_key="output3",
+    verbose=True
+)
+
+overall_seq_chain = SequentialChain(
+    chains=[chain1, chain2, chain3],
+    input_variables=["input1"],
+    output_variables=["output1", "output2", "output3"],
+    verbose=True
+)
+```
