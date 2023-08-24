@@ -20,8 +20,15 @@ LangChain menawarkan kemudahan bagi pengembang untuk berinteraksi dengan LLMs se
 Dengan kedua aspek tersebut kita sudah dapat mengerjakan berbagai studi kasus.
 
 ## Instalasi
+
+**LangChain**
 ```
 pip install langchain
+```
+
+**Chainlit**
+```
+pip install chainlit
 ```
 
 ## Models
@@ -179,5 +186,24 @@ overall_seq_chain = SequentialChain(
     input_variables=["input1"],
     output_variables=["output1", "output2", "output3"],
     verbose=True
+)
+```
+
+### 3. Retrieval QA
+Sebuah objek chain yang dirancang khusus untuk Tanya-Jawab berdasarkan sumber informasi eksternal sebagai bagian dari prompt.
+
+```python
+from langchain.chat_models import ChatOpenAI
+from langchain.chains import RetrievalQA
+from langchain.vectorstores import FAISS
+
+# Create vector/embeddings store DB
+embeddings = OpenAIEmbeddings()
+db = FAISS.from_documents(pages, embeddings)
+
+chat_llm = ChatOpenAI()
+chain = RetrievalQA.from_llm(
+    llm=chat_llm,
+    retriever=db.as_retriever()
 )
 ```
